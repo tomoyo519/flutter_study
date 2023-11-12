@@ -30,7 +30,6 @@ class MyApp extends StatelessWidget {
           child: Row(
 
             crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
                 Image.asset( "assets/wow.png", height: 120, width: 120,),
                 SizedBox(
