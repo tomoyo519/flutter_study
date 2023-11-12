@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  // 앱 시작해주세요.
   runApp(const MyApp());
 }
 
