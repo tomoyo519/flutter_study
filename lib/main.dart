@@ -31,33 +31,27 @@ class MyApp extends StatelessWidget {
 
             crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset( "assets/wow.png", height: 120, width: 120,),
-                SizedBox(
+                Flexible(child: Image.asset( "assets/wow.png", height: 120, width: 120 ),flex:1),
+                Flexible(child: Container(
+                  padding: EdgeInsets.all(10),
                   width: 250, height :250,
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-
-                      children: [
-
-                        Text("캐논 DSLR 100D (단렌즈, 충전기 16기가 SD 포함)", style: TextStyle(fontSize: 20),),
-                        Text("성동구 행당동 끌올 10분전 ",),
-                        Text("210,000원", style: TextStyle(fontWeight:FontWeight.w800)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children:[
-                            IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border)),
-                            Text("4")
-                          ]
-
-                        )
-
-                      ],
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("캐논 DSLR 100D (단렌즈, 충전기 16기가 SD 포함)", style: TextStyle(fontSize: 20),),
+                      Text("성동구 행당동 끌올 10분전 ",),
+                      Text("210,000원", style: TextStyle(fontWeight:FontWeight.w800)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children:[
+                          IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border)),
+                          Text("4")
+                        ]
+                      )
+                    ],
                   ),
-                )
+                ), flex:4)
               ],
              ),
         ),
