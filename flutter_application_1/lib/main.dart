@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:contacts_service/contacts_service.dart';
 
 void main() {
   //앱 시작해주세요.
@@ -15,12 +17,26 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var a = 10;
   var total = 3;
-  var names = ['a', 'b', 'c'];
-  addOne(name) {
+  List<Contact> names = [];
+
+  addNames(contacts) async {
+    var contacts = await ContactsService.getContacts();
     setState(() {
-      names.add(name.toString());
+      names = contacts;
     });
-    print(names);
+  }
+
+  getPermission() async {
+    var status = await Permission.contacts.status;
+    if (status.isGranted) {
+      var contacts = await ContactsService.getContacts();
+      setState(() {
+        names = contacts;
+      });
+    } else if (status.isDenied) {
+      print('거절됨');
+      Permission.contacts.request();
+    }
   }
 
   @override
@@ -30,7 +46,7 @@ class _MyAppState extends State<MyApp> {
           showDialog(
               context: context,
               builder: (context) {
-                return MyModal(addOne: addOne);
+                return MyModal(addNames: addNames);
               });
         }),
         appBar: AppBar(
@@ -38,7 +54,9 @@ class _MyAppState extends State<MyApp> {
           actions: [
             IconButton(
               icon: Icon(Icons.search),
-              onPressed: () {},
+              onPressed: () {
+                getPermission();
+              },
               color: Colors.black,
             ),
           ],
@@ -47,14 +65,21 @@ class _MyAppState extends State<MyApp> {
         body: ListView.builder(
             itemCount: names.length,
             itemBuilder: (c, i) {
-              return ListTile(title: Text(names[i]));
+              return ListTile(title: Text(names[i].givenName.toString()));
             }));
   }
 }
 
 class MyModal extends StatelessWidget {
-  MyModal({Key? key, this.addOne}) : super(key: key);
-  var addOne;
+  MyModal({Key? key, this.addNames}) : super(key: key);
+
+  var addNames;
+  addContact(inputData) async {
+    var newPerson = new Contact();
+    newPerson.givenName = inputData;
+    await ContactsService.addContact(newPerson);
+    addNames(newPerson);
+  }
 
   var inputData = '';
 
@@ -86,8 +111,7 @@ class MyModal extends StatelessWidget {
                   child: Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    print('찍힘?');
-                    addOne(inputData);
+                    addContact(inputData);
                   },
                   child: Text("OK"))
             ])
